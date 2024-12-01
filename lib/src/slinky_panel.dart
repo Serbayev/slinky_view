@@ -62,14 +62,7 @@ class SlinkyPannelState extends State<SlinkyPanel> {
             _scrollController = scrollController;
             return ClipRRect(
               borderRadius: widget.panelParameter.borderRadius,
-              child: CustomScrollView(
-                controller: scrollController,
-                physics: const ClampingScrollPhysics(),
-                slivers: [
-                  widget.panelParameter.appBar,
-                  ...widget.panelParameter.contents,
-                ],
-              ),
+              child: widget.panelParameter.child,
             );
           },
         ),

@@ -41,25 +41,7 @@ class MyHomePageState extends State<MyHomePage> {
     return SlinkyView(
       controller: _controller,
       panelParameter: SlinkyPanelParameter(
-        contents: [
-          SliverFixedExtentList(
-            delegate: SliverChildBuilderDelegate(
-              childCount: 10,
-              (context, index) {
-                return ColoredBox(
-                  color: index % 2 == 0
-                      ? Colors.grey.shade400
-                      : Colors.grey.shade200,
-                );
-              },
-            ),
-            itemExtent: 120,
-          ),
-          const SliverFillRemaining(
-            hasScrollBody: false,
-            child: ColoredBox(color: Colors.white),
-          ),
-        ],
+        child: SizedBox(),
       ),
       body: Container(
         color: Colors.blue.shade100,

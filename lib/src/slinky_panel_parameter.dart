@@ -4,8 +4,7 @@ import 'package:slinky_view/src/slinky_panel_app_bar.dart';
 /// SlinkyPannelParameter is a class that handles panel parameters.
 class SlinkyPanelParameter {
   const SlinkyPanelParameter({
-    required this.contents,
-    this.appBar = slinkyPanelAppBar,
+    required this.child,
     this.maxSize = 0.9,
     this.minSize = 0.4,
     this.borderRadius = const BorderRadius.all(Radius.circular(32)),
@@ -13,12 +12,9 @@ class SlinkyPanelParameter {
         assert(maxSize <= 1.0),
         assert(maxSize > minSize);
 
-  /// The widget displayed at the top in the Panel.
-  final SliverAppBar appBar;
-
   /// The widget's displayed in the Panel.
   /// The widget's must be Sliver widgets.
-  final List<Widget> contents;
+  final Widget child;
 
   /// The maximum fractional value of the panel height to use when displaying the panel.
   /// The default value is `0.9`.
@@ -34,14 +30,13 @@ class SlinkyPanelParameter {
   /// Creates a copy of this SlinkyPanelParameter but with the given fields replaced with the new values.
   SlinkyPanelParameter copyWith({
     SliverAppBar? appBar,
-    List<Widget>? contents,
+    Widget? child,
     double? maxSize,
     double? minSize,
     BorderRadiusGeometry? borderRadius,
   }) {
     return SlinkyPanelParameter(
-      appBar: appBar ?? this.appBar,
-      contents: contents ?? this.contents,
+      child: child ?? this.child,
       maxSize: maxSize ?? this.maxSize,
       minSize: minSize ?? this.minSize,
       borderRadius: borderRadius ?? this.borderRadius,
