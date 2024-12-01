@@ -42,6 +42,7 @@ class MyHomePageState extends State<MyHomePage> {
       controller: _controller,
       panelParameter: SlinkyPanelParameter(
         appBar: SliverAppBar(),
+
         child: SizedBox(),
       ),
       body: Container(

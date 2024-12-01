@@ -52,27 +52,25 @@ class SlinkyPannelState extends State<SlinkyPanel> {
   Widget build(BuildContext context) {
     return Listener(
       onPointerUp: (_) => widget.onPointerUp(),
-      child: SizedBox.expand(
-        child: DraggableScrollableSheet(
-          controller: widget.controller,
-          maxChildSize: widget.panelParameter.maxSize,
-          minChildSize: widget.panelParameter.minSize,
-          initialChildSize: widget.panelParameter.minSize,
-          builder: (context, scrollController) {
-            _scrollController = scrollController;
-            return ClipRRect(
-              borderRadius: widget.panelParameter.borderRadius,
-              child: CustomScrollView(
-                controller: scrollController,
-                physics: const BouncingScrollPhysics(),
-                slivers: [
-                  widget.panelParameter.appBar,
-                  ...widget.panelParameter.contents,
-                ],
-              ),
-            );
-          },
-        ),
+      child: DraggableScrollableSheet(
+        controller: widget.controller,
+        maxChildSize: widget.panelParameter.maxSize,
+        minChildSize: widget.panelParameter.minSize,
+        initialChildSize: widget.panelParameter.minSize,
+        builder: (context, scrollController) {
+          _scrollController = scrollController;
+          return ClipRRect(
+            borderRadius: widget.panelParameter.borderRadius,
+            child: CustomScrollView(
+              controller: scrollController,
+              physics: const BouncingScrollPhysics(),
+              slivers: [
+                widget.panelParameter.appBar,
+                ...widget.panelParameter.contents,
+              ],
+            ),
+          );
+        },
       ),
     );
   }
