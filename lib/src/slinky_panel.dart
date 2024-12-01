@@ -39,13 +39,22 @@ class SlinkyPannelState extends State<SlinkyPanel> {
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     widget.scrollToTopStream.listen((_) {
-      _scrollController.animateTo(
-        0,
-        duration: widget.scrollAnimationParameter.duration,
-        curve: widget.scrollAnimationParameter.curve,
-      );
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          0,
+          duration: widget.scrollAnimationParameter.duration,
+          curve: widget.scrollAnimationParameter.curve,
+        );
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
