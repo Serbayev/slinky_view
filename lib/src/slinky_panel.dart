@@ -62,7 +62,12 @@ class SlinkyPannelState extends State<SlinkyPanel> {
             _scrollController = scrollController;
             return ClipRRect(
               borderRadius: widget.panelParameter.borderRadius,
-              child: widget.panelParameter.child,
+              child: NestedScrollView(
+                controller: _scrollController,
+                headerSliverBuilder: (context, innerBoxIsScrolled) =>
+                    [widget.panelParameter.appBar],
+                body: widget.panelParameter.child,
+              ),
             );
           },
         ),
