@@ -35,11 +35,14 @@ class SlinkyPanel extends StatefulWidget {
 
 class SlinkyPannelState extends State<SlinkyPanel> {
   late ScrollController _scrollController;
+  late double _currentPosition; // Текущее положение панели
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _currentPosition = widget.panelParameter.minSize;
+
     widget.scrollToTopStream.listen((_) {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
@@ -60,7 +63,10 @@ class SlinkyPannelState extends State<SlinkyPanel> {
   @override
   Widget build(BuildContext context) {
     return Listener(
-      onPointerUp: (_) => widget.onPointerUp(),
+      onPointerUp: (_) {
+        widget.onPointerUp();
+        _continueFlingIfNeeded();
+      },
       child: DraggableScrollableSheet(
         controller: widget.controller,
         maxChildSize: widget.panelParameter.maxSize,
@@ -68,19 +74,57 @@ class SlinkyPannelState extends State<SlinkyPanel> {
         initialChildSize: widget.panelParameter.minSize,
         builder: (context, scrollController) {
           _scrollController = scrollController;
+
           return ClipRRect(
             borderRadius: widget.panelParameter.borderRadius,
-            child: CustomScrollView(
-              controller: scrollController,
-              physics: const BouncingScrollPhysics(),
-              slivers: [
-                widget.panelParameter.appBar,
-                ...widget.panelParameter.contents,
-              ],
+            child: NotificationListener<ScrollNotification>(
+              onNotification: (notification) {
+                if (notification is ScrollUpdateNotification) {
+                  _currentPosition = widget.controller.size;
+                }
+                return false;
+              },
+              child: CustomScrollView(
+                controller: scrollController,
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  widget.panelParameter.appBar,
+                  ...widget.panelParameter.contents,
+                ],
+              ),
             ),
           );
         },
       ),
     );
+  }
+
+  void _continueFlingIfNeeded() {
+    // Продолжаем скролл, если была инерция
+    final velocity = _scrollController.position.activity?.velocity ?? 0.0;
+    if (velocity != 0.0) {
+      final targetPosition = _calculateFlingTarget(velocity);
+      widget.controller.animateTo(
+        targetPosition,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
+  double _calculateFlingTarget(double velocity) {
+    // Рассчитываем конечную позицию панели на основе скорости
+    const threshold = 0.5; // Порог для "среднего" положения
+    if (velocity > 0) {
+      // Если движение вверх
+      return _currentPosition > threshold
+          ? widget.panelParameter.maxSize
+          : widget.panelParameter.minSize;
+    } else {
+      // Если движение вниз
+      return _currentPosition > threshold
+          ? widget.panelParameter.maxSize
+          : widget.panelParameter.minSize;
+    }
   }
 }
